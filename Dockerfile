@@ -16,8 +16,8 @@ COPY . .
 # Build the Vite app
 RUN yarn build
 
-# Expose port 3000 (default port for Vite development server)
-EXPOSE 3000
+# Expose port 
+EXPOSE 3030
 
 # Command to start the Vite server
 CMD ["yarn", "dev"]

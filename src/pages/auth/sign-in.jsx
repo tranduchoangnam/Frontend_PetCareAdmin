@@ -5,10 +5,33 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
 
 export function SignIn() {
+  const [checkBox, setCheckBox] = useState(false);
+  const [formData,setFormData] =useState({
+    email: "",
+    password: "",
+  })
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    if (!checkBox) {
+      alert("Please agree to the terms and conditions");
+      return;
+    }
+    await auth.loginAction(formData)
+  };
   return (
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
@@ -22,6 +45,10 @@ export function SignIn() {
               Your email
             </Typography>
             <Input
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               size="lg"
               placeholder="name@mail.com"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -33,6 +60,10 @@ export function SignIn() {
               Password
             </Typography>
             <Input
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               type="password"
               size="lg"
               placeholder="********"
@@ -43,6 +74,8 @@ export function SignIn() {
             />
           </div>
           <Checkbox
+            value={checkBox}
+            onChange={(e) => setCheckBox(e.target.checked)}
             label={
               <Typography
                 variant="small"
@@ -60,7 +93,7 @@ export function SignIn() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
+          <Button className="mt-6" fullWidth onClick={handleSubmit}>
             Sign In
           </Button>
 
