@@ -37,6 +37,7 @@ export function DashboardNavbar() {
     const handleUserClick = () => {
       if (auth.user) {
        //TODO
+        auth.logOut();
       }
       else navigate("/auth/sign-in");
     }
