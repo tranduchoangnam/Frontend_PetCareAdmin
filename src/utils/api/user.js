@@ -9,7 +9,7 @@ export const getUser = async (payload) => {
         });
         return response.data;
     } catch (err) {
-        console.log("error");
+        console.log("error", err);
     }
 };
 
@@ -22,6 +22,19 @@ export const getAllUser = async (payload) => {
         });
         return response.data;
     } catch (err) {
-        console.log("error");
+        console.log("error", err);
     }
 };
+
+export const getUserDetails = async (payload) => {
+    try {
+        const response = await axiosInstance.get(`/users/${payload.id}`, {
+            headers: {
+                Authorization: `Bearer ${payload.token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}

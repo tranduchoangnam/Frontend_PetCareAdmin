@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
-import { Users } from "@/pages/dashboard/demo";
+import { UserDetails, Users } from "@/pages/dashboard/demo";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -48,6 +48,11 @@ export const routes = [
         path: "/demo/users",
         element: <Users />,
       },
+      {
+        path: "/demo/users/user-details/:id",
+        element: <UserDetails />,
+        // params: {id: id}
+      }
     ],
   },
   {

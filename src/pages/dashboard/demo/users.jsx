@@ -14,10 +14,11 @@ import { useState, useEffect } from "react";
 
 export function Users() {
     const [allUser, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem("token") || "");
 
     useEffect(() => {
         try {
-            getAllUser().then((res) => setUser(res));
+            getAllUser({ token }).then((res) => setUser(res));
         } catch (error) {
             console.error("Error fetching user:", error);
         }
@@ -62,7 +63,7 @@ export function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allUsersData.map(
+                            {allUser?.map(
                                 (
                                     {
                                         avatar,
@@ -76,7 +77,7 @@ export function Users() {
                                     key,
                                 ) => {
                                     const className = `py-3 px-5 ${
-                                        key === allUsersData.length - 1
+                                        key === allUser.length - 1
                                             ? ""
                                             : "border-b border-blue-gray-50"
                                     }`;
@@ -121,9 +122,16 @@ export function Users() {
                                                 </Typography>
                                             </td>
                                             <td className={className}>
-                                                <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {role[0]}
-                                                </Typography>
+                                                <Chip
+                                                    variant="gradient"
+                                                    color={
+                                                        role == "admin"
+                                                            ? "green"
+                                                            : "blue-gray"
+                                                    }
+                                                    value={role}
+                                                    className="py-0.5 px-2 text-[11px] font-medium w-fit"
+                                                />
                                             </td>
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
@@ -134,7 +142,10 @@ export function Users() {
                                             <td className={className}>
                                                 <Typography
                                                     as="a"
-                                                    href="#"
+                                                    href={
+                                                        "/dashboard/demo/users/user-details/" +
+                                                        id
+                                                    }
                                                     className="text-xs font-semibold text-blue-gray-600"
                                                 >
                                                     Edit

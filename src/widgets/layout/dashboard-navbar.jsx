@@ -31,7 +31,7 @@ export function DashboardNavbar() {
     const [controller, dispatch] = useMaterialTailwindController();
     const { fixedNavbar, openSidenav } = controller;
     const { pathname } = useLocation();
-    const [layout, page] = pathname.split("/").filter((el) => el !== "");
+    const [layout, page, ...zz] = pathname.split("/").filter((el) => el !== "");
     const auth = useAuth();
     const navigate=useNavigate();
     const handleUserClick = () => {
@@ -75,6 +75,16 @@ export function DashboardNavbar() {
                         >
                             {page}
                         </Typography>
+                        {zz.map((item, index) => (
+                            <Typography
+                                key={index}
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                            >
+                                {item}
+                            </Typography>
+                    ))}
                     </Breadcrumbs>
                     <Typography variant="h6" color="blue-gray">
                         {page}
