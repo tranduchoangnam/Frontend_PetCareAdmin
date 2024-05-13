@@ -2,7 +2,7 @@ import axiosInstance from "@/configs/axiosInstance";
 
 export const getUser = async (payload) => {
     try {
-        const response = await axiosInstance.get("/users", {
+        const response = await axiosInstance.get(`/users/${payload.id}`, {
             headers: {
                 Authorization: `Bearer ${payload.token}`,
             },
@@ -15,7 +15,7 @@ export const getUser = async (payload) => {
 
 export const getAllUser = async (payload) => {
     try {
-        const response = await axiosInstance.get("/users/get-all", {
+        const response = await axiosInstance.get("/users/all", {
             headers: {
                 Authorization: `Bearer ${payload.token}`,
             },

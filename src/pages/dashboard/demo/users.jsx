@@ -13,7 +13,7 @@ import { getAllUser } from "@/utils/api/user";
 import { useState, useEffect } from "react";
 
 export function Users() {
-    const [allUser, setUser] = useState(null);
+    const [allUser, setUser] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
 
     useEffect(() => {
@@ -63,7 +63,7 @@ export function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allUser?.map(
+                            {allUser.map(
                                 (
                                     {
                                         avatar,

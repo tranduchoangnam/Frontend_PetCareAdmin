@@ -31,13 +31,16 @@ import { getAllPetsOfOwner } from "@/utils/api/pet";
 export function UserDetails() {
     const auth = useAuth();
     const [userDetails, setUser] = useState(null);
-    const [allPets, setPets] = useState(null);
+    const [allPets, setPets] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
     const { id } = useParams();
 
     useEffect(() => {
         try {
-            getUserDetails({ token, id }).then((res) => setUser(res));
+            getUserDetails({ token, id }).then((res) => {
+                setUser(res);
+                console.log(res);
+            });
         } catch (error) {
             console.error("Error fetching user:", error);
         }
@@ -45,7 +48,10 @@ export function UserDetails() {
 
     useEffect(() => {
         try {
-            getAllPetsOfOwner({ token, id }).then((res) => setPets(res));
+            getAllPetsOfOwner({ token, id }).then((res) => {
+                setPets(res);
+                console.log(res);
+            });
         } catch (error) {
             console.error("Error fetching user:", error);
         }
@@ -129,7 +135,7 @@ export function UserDetails() {
                         </Typography>
                         {allPets ? (
                             <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
-                                {allPets?.map(
+                                {allPets.map(
                                     ({
                                         name,
                                         age,
@@ -159,18 +165,12 @@ export function UserDetails() {
                                                     variant="small"
                                                     className="font-normal text-blue-gray-500"
                                                 >
-                                                    {name}
+                                                    {breed}
                                                 </Typography>
                                                 <Typography
                                                     variant="h5"
                                                     color="blue-gray"
                                                     className="mt-1 mb-2"
-                                                >
-                                                    {name}
-                                                </Typography>
-                                                <Typography
-                                                    variant="small"
-                                                    className="font-normal text-blue-gray-500"
                                                 >
                                                     {name}
                                                 </Typography>
