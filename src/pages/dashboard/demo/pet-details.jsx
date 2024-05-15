@@ -22,7 +22,8 @@ import { Link, useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthProvider";
-import { getPetDetails, getRegisteredService } from "@/utils/api/pet";
+import { getPetDetails } from "@/utils/api/pet";
+import { getRegisteredServiceByPet } from "@/utils/api/service";
 
 export function PetDetails() {
     const auth = useAuth();
@@ -44,7 +45,7 @@ export function PetDetails() {
 
     useEffect(() => {
         try {
-            getRegisteredService({ token, id }).then((res) => {
+            getRegisteredServiceByPet({ token, id }).then((res) => {
                 setServices(res);
                 console.log(res);
             });

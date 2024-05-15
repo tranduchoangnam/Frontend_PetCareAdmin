@@ -137,6 +137,7 @@ export function UserDetails() {
                             <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
                                 {allPets.map(
                                     ({
+                                        id,
                                         name,
                                         age,
                                         color,
@@ -174,15 +175,22 @@ export function UserDetails() {
                                                 >
                                                     {name}
                                                 </Typography>
-                                            </CardBody>
-                                            <CardFooter className="mt-6 flex items-center justify-between py-0 px-1">
                                                 <Button
                                                     variant="outlined"
                                                     size="sm"
                                                 >
-                                                    view pet
+                                                    <Typography
+                                                        as="a"
+                                                        className="text-xs font-medium"
+                                                        href={
+                                                            "/dashboard/demo/pets/pet-details/" +
+                                                            id
+                                                        }
+                                                    >
+                                                        view pet
+                                                    </Typography>
                                                 </Button>
-                                            </CardFooter>
+                                            </CardBody>
                                         </Card>
                                     ),
                                 )}

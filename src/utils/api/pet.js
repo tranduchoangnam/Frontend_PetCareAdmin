@@ -26,19 +26,6 @@ export const getPetDetails = async (payload) => {
     }
 }
 
-export const getRegisteredService = async (payload) => {
-    try {
-        const response = await axiosInstance.get(`/pets/${payload.id}/registered-services`, {
-            headers: {
-                Authorization: `Bearer ${payload.token}`,
-            },
-        });
-        return response.data;
-    } catch (err) {
-        console.log("error", err);
-    }
-}
-
 export const getAllPetsOfOwner = async (payload) => {
     try {
         const response = await axiosInstance.get(`/pets/all/owner=${payload.id}`, {
