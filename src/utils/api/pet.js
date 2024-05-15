@@ -1,8 +1,8 @@
 import axiosInstance from "@/configs/axiosInstance";
 
-export const getUser = async (payload) => {
+export const getAllPets = async (payload) => {
     try {
-        const response = await axiosInstance.get(`/users/${payload.id}`, {
+        const response = await axiosInstance.get("/pets/all", {
             headers: {
                 Authorization: `Bearer ${payload.token}`,
             },
@@ -13,9 +13,9 @@ export const getUser = async (payload) => {
     }
 };
 
-export const getAllUser = async (payload) => {
+export const getPetDetails = async (payload) => {
     try {
-        const response = await axiosInstance.get("/users/all", {
+        const response = await axiosInstance.get(`/pets/${payload.id}`, {
             headers: {
                 Authorization: `Bearer ${payload.token}`,
             },
@@ -24,11 +24,11 @@ export const getAllUser = async (payload) => {
     } catch (err) {
         console.log("error", err);
     }
-};
+}
 
-export const getUserDetails = async (payload) => {
+export const getAllPetsOfOwner = async (payload) => {
     try {
-        const response = await axiosInstance.get(`/users/${payload.id}`, {
+        const response = await axiosInstance.get(`/pets/all/owner=${payload.id}`, {
             headers: {
                 Authorization: `Bearer ${payload.token}`,
             },

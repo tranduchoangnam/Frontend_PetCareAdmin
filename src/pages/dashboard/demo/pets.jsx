@@ -8,19 +8,18 @@ import {
     Tooltip,
     Progress,
 } from "@material-tailwind/react";
-// import { allUsersData } from "@/data/test";
-import { getAllUser } from "@/utils/api/user";
+import { getAllPets } from "@/utils/api/pet";
 import { useState, useEffect } from "react";
 
-export function Users() {
-    const [allUser, setUser] = useState([]);
+export function Pets() {
+    const [allPets, setPets] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
 
     useEffect(() => {
         try {
-            getAllUser({ token }).then((res) => setUser(res));
+            getAllPets({ token }).then((res) => setPets(res));
         } catch (error) {
-            console.error("Error fetching user:", error);
+            console.error("Error fetching pets:", error);
         }
     }, []);
     return (
@@ -41,11 +40,10 @@ export function Users() {
                             <tr>
                                 {[
                                     "Id",
-                                    "Username",
-                                    "Email",
-                                    "Phone",
-                                    "Role",
+                                    "Name",
+                                    "Age",
                                     "Gender",
+                                    "Owner",
                                     "",
                                 ].map((el) => (
                                     <th
@@ -63,32 +61,33 @@ export function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allUser.map(
+                            {allPets.map(
                                 (
                                     {
-                                        avatar,
-                                        email,
                                         id,
-                                        username,
-                                        phone,
-                                        role,
+                                        name,
+                                        age,
+                                        color,
                                         gender,
+                                        breed,
+                                        avatar,
+                                        ownerId,
                                     },
                                     key,
                                 ) => {
                                     const className = `py-3 px-5 ${
-                                        key === allUser.length - 1
+                                        key === allPets.length - 1
                                             ? ""
                                             : "border-b border-blue-gray-50"
                                     }`;
 
                                     return (
-                                        <tr key={username}>
+                                        <tr key={name}>
                                             <td className={className}>
                                                 <div className="flex items-center gap-4">
                                                     <Avatar
                                                         src={avatar}
-                                                        alt={username}
+                                                        alt={name}
                                                         size="sm"
                                                         variant="rounded"
                                                     />
@@ -98,44 +97,44 @@ export function Users() {
                                                             color="blue-gray"
                                                             className="font-semibold"
                                                         >
-                                                            {username}
+                                                            {name}
                                                         </Typography>
                                                         <Typography className="text-xs font-normal text-blue-gray-500">
-                                                            {id}
+                                                            {breed}
                                                         </Typography>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {username}
+                                                    {name}
                                                 </Typography>
                                             </td>
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {email}
+                                                    {age}
                                                 </Typography>
                                             </td>
-                                            <td className={className}>
+                                            {/* <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {phone}
+                                                    {gender}
                                                 </Typography>
-                                            </td>
+                                            </td> */}
                                             <td className={className}>
                                                 <Chip
                                                     variant="gradient"
                                                     color={
-                                                        role == "admin"
-                                                            ? "green"
-                                                            : "blue-gray"
+                                                        gender == "male"
+                                                            ? "blue"
+                                                            : "pink"
                                                     }
-                                                    value={role}
+                                                    value={gender}
                                                     className="py-0.5 px-2 text-[11px] font-medium w-fit"
                                                 />
                                             </td>
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {gender}
+                                                    {ownerId}
                                                 </Typography>
                                             </td>
 
@@ -143,7 +142,7 @@ export function Users() {
                                                 <Typography
                                                     as="a"
                                                     href={
-                                                        "/dashboard/demo/users/user-details/" +
+                                                        "/dashboard/demo/pets/pet-details/" +
                                                         id
                                                     }
                                                     className="text-xs font-semibold text-blue-gray-600"
@@ -163,4 +162,4 @@ export function Users() {
     );
 }
 
-export default Users;
+export default Pets;

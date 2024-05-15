@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem("refresh", tokenResponse.data.refresh_token);
             navigate("/");
         } catch (err) {
-            console.log("error");
+            console.log("error", err);
         }
     };
 
