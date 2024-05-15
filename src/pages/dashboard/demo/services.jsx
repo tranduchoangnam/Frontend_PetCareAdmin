@@ -111,6 +111,18 @@ export function Services() {
                                                         {createdAt}
                                                     </Typography>
                                                 </td>
+                                                <td className={className}>
+                                                <Typography
+                                                    as="a"
+                                                    href={
+                                                        "/dashboard/demo/services/" + serviceName.replace(/ /g, '-') + "/" +
+                                                        id
+                                                    }
+                                                    className="text-xs font-semibold text-blue-gray-600"
+                                                >
+                                                    Edit
+                                                </Typography>
+                                            </td>
                                             </tr>
                                         ),
                                     )
