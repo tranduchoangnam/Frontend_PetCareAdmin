@@ -24,11 +24,27 @@ export const getPetDetails = async (payload) => {
     } catch (err) {
         console.log("error", err);
     }
-}
+};
 
 export const getAllPetsOfOwner = async (payload) => {
     try {
-        const response = await axiosInstance.get(`/pets/all/owner=${payload.id}`, {
+        const response = await axiosInstance.get(
+            `/pets/all/owner=${payload.id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+            },
+        );
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+};
+
+export const addPet = async (payload) => {
+    try {
+        const response = await axiosInstance.post("/pets", payload.data, {
             headers: {
                 Authorization: `Bearer ${payload.token}`,
             },
@@ -37,4 +53,30 @@ export const getAllPetsOfOwner = async (payload) => {
     } catch (err) {
         console.log("error", err);
     }
-}
+};
+
+export const updatePet = async (payload) => {
+    try {
+        const response = await axiosInstance.patch(`/pets/${payload.id}`, payload.data, {
+            headers: {
+                Authorization: `Bearer ${payload.token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+};
+
+export const deletePet = async (payload) => {
+    try {
+        const response = await axiosInstance.delete(`/pets/${payload.id}`, {
+            headers: {
+                Authorization: `Bearer ${payload.token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+};

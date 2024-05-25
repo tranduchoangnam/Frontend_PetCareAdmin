@@ -33,14 +33,13 @@ export function DashboardNavbar() {
     const { pathname } = useLocation();
     const [layout, page, ...zz] = pathname.split("/").filter((el) => el !== "");
     const auth = useAuth();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const handleUserClick = () => {
-      if (auth.user) {
-       //TODO
-        auth.logOut();
-      }
-      else navigate("/auth/sign-in");
-    }
+        if (auth.user) {
+            //TODO
+            auth.logOut();
+        } else navigate("/auth/sign-in");
+    };
     return (
         <Navbar
             color={fixedNavbar ? "white" : "transparent"}
@@ -84,7 +83,7 @@ export function DashboardNavbar() {
                             >
                                 {item}
                             </Typography>
-                    ))}
+                        ))}
                     </Breadcrumbs>
                     <Typography variant="h6" color="blue-gray">
                         {page}

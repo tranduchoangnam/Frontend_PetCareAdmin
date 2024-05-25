@@ -7,23 +7,54 @@ import {
     Chip,
     Tooltip,
     Progress,
+    Button,
 } from "@material-tailwind/react";
-import { getAllPets } from "@/utils/api/pet";
+import { getAllPets, addPet, deletePet } from "@/utils/api/pet";
 import { useState, useEffect } from "react";
+import { AddItemModal } from "@/widgets/modals";
 
 export function Pets() {
     const [allPets, setPets] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const handleOpen = () => setModalOpen(true);
+    const handleDelete = (id) => {
+        deletePet({ token, id })
+            .then(() => getAllPets({ token }))
+            .then((res) => setPets(res))
+            .catch((error) => console.error("Error deleting pet:", error));
+    };
+    const handleClose = () => setModalOpen(false);
+    const handleFormSubmit = (formData) => {
+        addPet({ token, data: formData })
+            .then(() => getAllPets({ token }))
+            .then((res) => setPets(res))
+            .catch((error) => console.error("Error adding pet:", error));
+    };
 
     useEffect(() => {
-        try {
-            getAllPets({ token }).then((res) => setPets(res));
-        } catch (error) {
-            console.error("Error fetching pets:", error);
-        }
+        getAllPets({ token })
+            .then((res) => setPets(res))
+            .catch((error) => console.error("Error fetching pets:", error));
     }, []);
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
+            <AddItemModal
+                isOpen={isModalOpen}
+                onClose={handleClose}
+                fieldNames={[
+                    "name",
+                    "age",
+                    "color",
+                    "gender",
+                    "breed",
+                    "avatar",
+                    "ownerId",
+                ]}
+                onSubmit={handleFormSubmit}
+                itemName="Pet"
+            />
             <Card>
                 <CardHeader
                     variant="gradient"
@@ -31,7 +62,7 @@ export function Pets() {
                     className="mb-8 p-6"
                 >
                     <Typography variant="h6" color="white">
-                        All Users
+                        All Pets
                     </Typography>
                 </CardHeader>
                 <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
@@ -45,6 +76,15 @@ export function Pets() {
                                     "Gender",
                                     "Owner",
                                     "",
+                                    <Button
+                                        color="lightBlue"
+                                        size="sm"
+                                        ripple="light"
+                                        onClick={handleOpen}
+                                    >
+                                        Add
+                                    </Button>,
+                                    ,
                                 ].map((el) => (
                                     <th
                                         key={el}
@@ -67,7 +107,7 @@ export function Pets() {
                                         id,
                                         name,
                                         age,
-                                        color,
+                                        owner,
                                         gender,
                                         breed,
                                         avatar,
@@ -82,7 +122,7 @@ export function Pets() {
                                     }`;
 
                                     return (
-                                        <tr key={name}>
+                                        <tr key={id}>
                                             <td className={className}>
                                                 <div className="flex items-center gap-4">
                                                     <Avatar
@@ -134,7 +174,7 @@ export function Pets() {
                                             </td>
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {ownerId}
+                                                    {owner.username}
                                                 </Typography>
                                             </td>
 
@@ -148,6 +188,16 @@ export function Pets() {
                                                     className="text-xs font-semibold text-blue-gray-600"
                                                 >
                                                     Edit
+                                                </Typography>
+                                            </td>
+                                            <td className={className}>
+                                                <Typography
+                                                    className="text-xs font-semibold text-red-400 cursor-pointer"
+                                                    onClick={() =>
+                                                        handleDelete(id)
+                                                    }
+                                                >
+                                                    Delete
                                                 </Typography>
                                             </td>
                                         </tr>

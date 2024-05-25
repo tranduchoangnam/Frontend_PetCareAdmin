@@ -22,20 +22,43 @@ import { Link, useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthProvider";
-import { getPetDetails } from "@/utils/api/pet";
+import { getPetDetails, updatePet } from "@/utils/api/pet";
 import { getRegisteredServiceByPet } from "@/utils/api/service";
 
 export function PetDetails() {
     const auth = useAuth();
+    const [ownerId, setOwnerId] = useState(null);
     const [petDetails, setPet] = useState(null);
+    const [petview, setPetview] = useState(null);
+    const [editable, setEditable] = useState(false);
     const [allServices, setServices] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
     const { id } = useParams();
 
+    const edit = () => {
+        setEditable(!editable);
+    };
+
+    const handleSave = async (d) => {
+        const { owner, ...r } = d;
+        const data = { ownerId, ...r };
+        try {
+            updatePet({ token, data, id }).then(() => {
+                getPetDetails({ token }).then((res) => setPet(res));
+            });
+        } catch (error) {
+            console.error("err update pet", error);
+        }
+    };
     useEffect(() => {
         try {
             getPetDetails({ token, id }).then((res) => {
-                setPet(res);
+                const { owner, ...r } = res;
+                setPet(r);
+                const { avatar, ownerId, id, ...view } = r;
+                const v = { ...view, owner: owner.username };
+                setOwnerId(ownerId);
+                setPetview(v);
                 // console.log(res);
             });
         } catch (error) {
@@ -70,10 +93,15 @@ export function PetDetails() {
                                 className="rounded-lg shadow-lg shadow-blue-gray-500/40"
                             />
                             <div>
-                                <Typography className="font-normal text-blue-gray-600">
+                                <Typography className="font-bold ">
                                     {petDetails?.breed}
                                 </Typography>
-                                <Typography>id: {petDetails?.id}</Typography>
+                                <div className="flex">
+                                    <Typography className="font-bold">
+                                        ID:
+                                    </Typography>
+                                    {petDetails?.id}
+                                </div>
                             </div>
                         </div>
                         <div className="w-96">
@@ -98,18 +126,26 @@ export function PetDetails() {
                     <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
                         <ProfileInfoCard
                             title="Profile Information"
-                            details={{
-                                name: petDetails?.name,
-                                age: petDetails?.age.toString(),
-                                color: petDetails?.color,
-                                gender: petDetails?.gender,
-                                breed: petDetails?.breed,
-                                ownerId: petDetails?.ownerId,
-                            }}
+                            details={petview}
+                            editable={editable}
+                            onSave={handleSave}
+                            setDetails={setPetview}
                             action={
-                                <Tooltip content="Edit Profile">
-                                    <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500" />
-                                </Tooltip>
+                                editable ? (
+                                    <span
+                                        className="cursor-pointer"
+                                        onClick={() => edit()}
+                                    >
+                                        x
+                                    </span>
+                                ) : (
+                                    <Tooltip content="Edit Profile">
+                                        <PencilIcon
+                                            onClick={() => edit()}
+                                            className="h-4 w-4 cursor-pointer text-blue-gray-500"
+                                        />
+                                    </Tooltip>
+                                )
                             }
                         />
                     </div>
@@ -135,37 +171,53 @@ export function PetDetails() {
                                                 >
                                                     {serviceName}:
                                                 </Typography>
-                                                
-                                                {services.length > 0 ? (<div>
-                                                    {services.map(
-                                                        ({ serviceId, date }) => (
-                                                            <div
-                                                                key={serviceId}
-                                                                className="flex items-center gap-6"
-                                                            >
-                                                                <Typography
-                                                                    variant="h6"
-                                                                    color="blue-gray"
-                                                                    className="mb-2 font-normal text-blue-gray-500"
+
+                                                {services.length > 0 ? (
+                                                    <div>
+                                                        {services.map(
+                                                            ({ id, date }) => (
+                                                                <div
+                                                                    key={id}
+                                                                    className="flex items-center gap-6"
                                                                 >
-                                                                    {date}
-                                                                </Typography>
-                                                                <Button
-                                                                    color="lightBlue"
-                                                                    size="sm"
-                                                                    ripple="light"
-                                                                >
-                                                                    View
-                                                                </Button>
-                                                            </div>
-                                                        ),
-                                                    )}
-                                                </div>) : (<Typography
-                                                    variant="small"
-                                                    className="font-normal text-blue-gray-500"
-                                                >
-                                                    No available service
-                                                </Typography>)}
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        color="blue-gray"
+                                                                        className="mb-2 font-normal text-blue-gray-500"
+                                                                    >
+                                                                        {date}
+                                                                    </Typography>
+                                                                    <a
+                                                                        href={
+                                                                            "/dashboard/demo/services/" +
+                                                                            serviceName.replace(
+                                                                                / /g,
+                                                                                "-",
+                                                                            ) +
+                                                                            "/" +
+                                                                            id
+                                                                        }
+                                                                    >
+                                                                        <Button
+                                                                            color="lightBlue"
+                                                                            size="sm"
+                                                                            ripple="light"
+                                                                        >
+                                                                            View
+                                                                        </Button>
+                                                                    </a>
+                                                                </div>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <Typography
+                                                        variant="small"
+                                                        className="font-normal text-blue-gray-500"
+                                                    >
+                                                        No available service
+                                                    </Typography>
+                                                )}
                                             </div>
                                         ),
                                 )}
