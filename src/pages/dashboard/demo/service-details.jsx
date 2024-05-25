@@ -21,14 +21,33 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { useState, useEffect } from "react";
-import { getServiceDetails } from "@/utils/api/service";
+import { getServiceDetails, updateService } from "@/utils/api/service";
 
-export function ServiceDetails() {    
+export function ServiceDetails() {
     const [serviceDetails, setService] = useState(null);
+    const [serviceview, setServiceview] = useState(null);
     const [pet, setPet] = useState(null);
+    const [editable, setEditable] = useState(false);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
     const { serviceName, id } = useParams();
+    const serviceApi = serviceName.replace(/ /g, "-");
     // console.log(serviceName, id)
+    const edit = () => {
+        setEditable(!editable);
+    };
+
+    const handleSave = async (data) => {
+        try {
+            updateService({ token, data, id, serviceApi }).then(() => {
+                getServiceDetails({ token }).then((res) => {
+                    setService(res);
+                    console.log("test", res)
+                });
+            });
+        } catch (error) {
+            console.error("err update user", error);
+        }
+    };
 
     useEffect(() => {
         try {
@@ -36,6 +55,9 @@ export function ServiceDetails() {
                 const { pet, ...service } = res;
                 setService(service);
                 setPet(pet);
+                const { id, petId, serviceName, updatedAt, ...serviceview } =
+                    service;
+                setServiceview(serviceview);
                 // console.log(res);
             });
         } catch (error) {
@@ -59,10 +81,21 @@ export function ServiceDetails() {
                                 className="rounded-lg shadow-lg shadow-blue-gray-500/40"
                             />
                             <div>
-                                <Typography className="font-normal text-blue-gray-600">
+                                <Typography className="font-bold text-blue-gray-600">
                                     {pet?.breed}
                                 </Typography>
-                                <Typography>id: {pet?.id}</Typography>
+                                <div className="flex">
+                                    <Typography className="font-bold">
+                                        ID:{" "}
+                                    </Typography>
+                                    {pet?.id}
+                                </div>
+                                <div className="flex">
+                                    <Typography className="font-bold">
+                                        Service ID:{" "}
+                                    </Typography>
+                                    {id}
+                                </div>
                             </div>
                         </div>
                         <div className="w-96">
@@ -87,11 +120,26 @@ export function ServiceDetails() {
                     <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
                         <ProfileInfoCard
                             title={serviceName}
-                            details={serviceDetails}
+                            details={serviceview}
+                            setDetails={setServiceview}
+                            editable={editable}
+                            onSave={handleSave}
                             action={
-                                <Tooltip content="Edit Profile">
-                                    <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500" />
-                                </Tooltip>
+                                editable ? (
+                                    <span
+                                        className="cursor-pointer"
+                                        onClick={() => edit()}
+                                    >
+                                        x
+                                    </span>
+                                ) : (
+                                    <Tooltip content="Edit Profile">
+                                        <PencilIcon
+                                            onClick={() => edit()}
+                                            className="h-4 w-4 cursor-pointer text-blue-gray-500"
+                                        />
+                                    </Tooltip>
+                                )
                             }
                         />
                     </div>

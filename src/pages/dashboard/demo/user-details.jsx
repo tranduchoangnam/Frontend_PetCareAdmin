@@ -19,27 +19,45 @@ import {
     Cog6ToothIcon,
     PencilIcon,
 } from "@heroicons/react/24/solid";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
-import { platformSettingsData, conversationsData, projectsData } from "@/data";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/context/AuthProvider";
-import { getUserDetails } from "@/utils/api/user";
+import { getUserDetails, updateUser } from "@/utils/api/user";
 // import { userDetails, allPets } from "@/data/test";
 import { getAllPetsOfOwner } from "@/utils/api/pet";
 
 export function UserDetails() {
-    const auth = useAuth();
     const [userDetails, setUser] = useState(null);
+    const [userview, setUserview] = useState(null);
+    const [editable, setEditable] = useState(false);
     const [allPets, setPets] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
     const { id } = useParams();
+
+    const edit = () => {
+        setEditable(!editable);
+    };
+
+    const handleSave = async (data) => {
+        try {
+            updateUser({ token, data, id }).then(() => {
+                getUserDetails({ token }).then((res) => {
+                    console.log("test", res)
+                    setUser(res);
+                });
+            });
+        } catch (error) {
+            console.error("err update user", error);
+        }
+    };
 
     useEffect(() => {
         try {
             getUserDetails({ token, id }).then((res) => {
                 setUser(res);
-                console.log(res);
+                const { id, ...view } = res;
+                setUserview(view);
+                // console.log(res);
             });
         } catch (error) {
             console.error("Error fetching user:", error);
@@ -84,7 +102,12 @@ export function UserDetails() {
                                         className="py-0.5 px-2 text-[11px] font-medium w-fit"
                                     />
                                 </Typography>
-                                <Typography>id: {userDetails?.id}</Typography>
+                                <div className="flex">
+                                    <Typography className="font-bold">
+                                        ID:{" "}
+                                    </Typography>
+                                    {userDetails?.id}
+                                </div>
                             </div>
                         </div>
                         <div className="w-96">
@@ -109,18 +132,26 @@ export function UserDetails() {
                     <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
                         <ProfileInfoCard
                             title="Profile Information"
-                            details={{
-                                username: userDetails?.username,
-                                mobile: userDetails?.phone,
-                                email: userDetails?.email,
-                                location: userDetails?.address || "N/A",
-                                gender: userDetails?.gender,
-                                role: userDetails?.role,
-                            }}
+                            details={userview}
+                            setDetails={setUserview}
+                            onSave={handleSave}
+                            editable={editable}
                             action={
-                                <Tooltip content="Edit Profile">
-                                    <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500" />
-                                </Tooltip>
+                                editable ? (
+                                    <span
+                                        className="cursor-pointer"
+                                        onClick={() => edit()}
+                                    >
+                                        x
+                                    </span>
+                                ) : (
+                                    <Tooltip content="Edit Profile">
+                                        <PencilIcon
+                                            onClick={() => edit()}
+                                            className="h-4 w-4 cursor-pointer text-blue-gray-500"
+                                        />
+                                    </Tooltip>
+                                )
                             }
                         />
                     </div>

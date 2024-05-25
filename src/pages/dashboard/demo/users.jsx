@@ -6,15 +6,36 @@ import {
     Avatar,
     Chip,
     Tooltip,
-    Progress,
+    Button,
 } from "@material-tailwind/react";
 // import { allUsersData } from "@/data/test";
-import { getAllUser } from "@/utils/api/user";
+import { getAllUser, registerUser, deleteUser } from "@/utils/api/user";
 import { useState, useEffect } from "react";
+import { AddItemModal } from "@/widgets/modals";
 
 export function Users() {
     const [allUser, setUser] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const handleOpen = () => setModalOpen(true);
+    const handleClose = () => setModalOpen(false);
+    const handleFormSubmit = (formData) => {
+        try {
+            // console.log(formData);
+            registerUser({ token, data: formData }).then(() => {
+                getAllUser({ token }).then((res) => setUser(res));
+            });
+        } catch (error) {
+            console.error("err add user", error);
+        }
+    };
+
+    const handleDelete = (id) => {
+        deleteUser({ token, id }).then(() => {
+            getAllUser({ token }).then((res) => setUser(res));
+        });
+    };
 
     useEffect(() => {
         try {
@@ -25,6 +46,21 @@ export function Users() {
     }, []);
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
+            <AddItemModal
+                isOpen={isModalOpen}
+                onClose={handleClose}
+                fieldNames={[
+                    "username",
+                    "email",
+                    "phone",
+                    "password",
+                    "role",
+                    "avatar",
+                    "gender",
+                ]}
+                onSubmit={handleFormSubmit}
+                itemName="User"
+            />
             <Card>
                 <CardHeader
                     variant="gradient"
@@ -40,13 +76,19 @@ export function Users() {
                         <thead>
                             <tr>
                                 {[
-                                    "Id",
-                                    "Username",
+                                    "User",
                                     "Email",
                                     "Phone",
                                     "Role",
-                                    "Gender",
                                     "",
+                                    <Button
+                                        color="lightBlue"
+                                        size="sm"
+                                        ripple="light"
+                                        onClick={handleOpen}
+                                    >
+                                        Add
+                                    </Button>,
                                 ].map((el) => (
                                     <th
                                         key={el}
@@ -66,9 +108,9 @@ export function Users() {
                             {allUser.map(
                                 (
                                     {
+                                        id,
                                         avatar,
                                         email,
-                                        id,
                                         username,
                                         phone,
                                         role,
@@ -88,7 +130,6 @@ export function Users() {
                                                 <div className="flex items-center gap-4">
                                                     <Avatar
                                                         src={avatar}
-                                                        alt={username}
                                                         size="sm"
                                                         variant="rounded"
                                                     />
@@ -106,11 +147,7 @@ export function Users() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className={className}>
-                                                <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {username}
-                                                </Typography>
-                                            </td>
+
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
                                                     {email}
@@ -134,12 +171,6 @@ export function Users() {
                                                 />
                                             </td>
                                             <td className={className}>
-                                                <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                    {gender}
-                                                </Typography>
-                                            </td>
-
-                                            <td className={className}>
                                                 <Typography
                                                     as="a"
                                                     href={
@@ -149,6 +180,16 @@ export function Users() {
                                                     className="text-xs font-semibold text-blue-gray-600"
                                                 >
                                                     Edit
+                                                </Typography>
+                                            </td>
+                                            <td className={className}>
+                                                <Typography
+                                                    className="text-xs font-semibold text-red-400 cursor-pointer"
+                                                    onClick={() =>
+                                                        handleDelete(id)
+                                                    }
+                                                >
+                                                    Delete
                                                 </Typography>
                                             </td>
                                         </tr>

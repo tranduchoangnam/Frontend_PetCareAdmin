@@ -8,8 +8,11 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
+import { useAuth } from "@/context/AuthProvider";
 
 export function Sidenav({ brandImg, brandName, routes }) {
+    const auth = useAuth();
+    const filteredRoutes = auth.user ? routes.filter(route => route.layout !== "auth") : routes.filter(route => route.layout !== "dashboard");
     const [controller, dispatch] = useMaterialTailwindController();
     const { sidenavColor, sidenavType, openSidenav } = controller;
     const sidenavTypes = {
@@ -48,7 +51,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 </IconButton>
             </div>
             <div className="m-4">
-                {routes.map(({ layout, title, pages }, key) => (
+                {filteredRoutes.map(({ layout, title, pages }, key) => (
                     <ul key={key} className="mb-4 flex flex-col gap-1">
                         {title && (
                             <li className="mx-3.5 mt-4 mb-2">
@@ -108,7 +111,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
 
 Sidenav.defaultProps = {
     brandImg: "/img/logo-ct.png",
-    brandName: "Material Tailwind React",
+    brandName: "Petcare Admin Dashboard",
 };
 
 Sidenav.propTypes = {
