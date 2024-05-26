@@ -6,18 +6,17 @@ import {
     Avatar,
     Button,
     Tooltip,
-    Progress,
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { getAllRegisteredServices, registerService, deleteService } from "@/utils/api/service";
 import { AddItemModal } from "@/widgets/modals";
-import DatePicker from "react-datepicker";
 
 export function Services() {
     const [allServices, setServices] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
     const [serviceApi, setServiceApi] = useState(null);
-    const [selectedService, setSelectedService] = useState(null);
+    const [selectedService, setSelectedService] = useState("");
+    const [filteredServices, setFilteredServices] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
 
     const serviceOptions = [
@@ -56,44 +55,63 @@ export function Services() {
     };
 
     const handleServiceSelect = (event) => {
-        setSelectedService(event.target.value);
-        setServiceApi(api[event.target.value]);
+        const selectedService = event.target.value;
+        setSelectedService(selectedService);
+        setServiceApi(api[selectedService]);
+
+        const filtered = allServices.filter(service =>
+            service.serviceName.toLowerCase().includes(selectedService)
+        );
+        setFilteredServices(filtered);
+    };
+
+    const handleAddService = () => {
         setModalOpen(true);
     };
 
-    const handleFormSubmit = (formData) => {
+    const handleFormSubmit = async (formData) => {
         try {
-            console.log(formData);
-            registerService({ token, data: formData, serviceApi }).then(() => {
-                getAllRegisteredServices({ token }).then((res) =>
-                    setServices(res),
-                );
-            });
+            await registerService({ token, data: formData, serviceApi });
+            const updatedServices = await getAllRegisteredServices({ token });
+            setServices(updatedServices);
+            setFilteredServices(updatedServices.filter(service =>
+                service.serviceName.toLowerCase().includes(selectedService)
+            ));
         } catch (error) {
-            console.error("err add services", error);
+            console.error("Error adding service:", error);
         }
     };
 
-    const handleDelete = (id, serviceApi) => {
-        deleteService({ token, id, serviceApi }).then(() => {
-            getAllRegisteredServices({ token }).then((res) =>
-                setServices(res),
-            );
-        });
+    const handleDelete = async (id, serviceApi) => {
+        try {
+            await deleteService({ token, id, serviceApi });
+            const updatedServices = await getAllRegisteredServices({ token });
+            setServices(updatedServices);
+            setFilteredServices(updatedServices.filter(service =>
+                service.serviceName.toLowerCase().includes(selectedService)
+            ));
+        } catch (error) {
+            console.error("Error deleting service:", error);
+        }
     };
 
     const handleClose = () => {
-        setSelectedService(null);
         setModalOpen(false);
     };
 
     useEffect(() => {
-        try {
-            getAllRegisteredServices({ token }).then((res) => setServices(res));
-        } catch (error) {
-            console.error("Error fetching services:", error);
-        }
-    }, []);
+        const fetchData = async () => {
+            try {
+                const servicesResponse = await getAllRegisteredServices({ token });
+                setServices(servicesResponse);
+                setFilteredServices(servicesResponse);
+            } catch (error) {
+                console.error("Error fetching services:", error);
+            }
+        };
+        fetchData();
+    }, [token]);
+
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
             <AddItemModal
@@ -110,41 +128,34 @@ export function Services() {
                     className="mb-8 p-6"
                 >
                     <Typography variant="h6" color="white">
-                        All Registered Service
+                        All Registered Services
                     </Typography>
                 </CardHeader>
                 <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-                    <table className="w-full min-w-[640px] table-auto">
+                    <div className="flex justify-end items-center px-5">
+                        <Button
+                            onClick={handleAddService}
+                            disabled={!selectedService}
+                        >
+                            Add Service
+                        </Button>
+                        <select
+                            value={selectedService}
+                            onChange={handleServiceSelect}
+                            className="ml-4 p-2 border rounded-md"
+                        >
+                            <option value="">All</option>
+                            {serviceOptions.map((option) => (
+                                <option key={option.value} value={option.value} >
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <table className="w-full min-w-[640px] table-auto mt-4">
                         <thead>
                             <tr>
-                                {[
-                                    "Pet",
-                                    "Service",
-                                    "Owner",
-                                    "Created At",
-                                    <Button
-                                        // onClick={handleOpenModal}
-                                        disabled={!selectedService}
-                                    >
-                                        Add Service
-                                    </Button>,
-                                    <select
-                                        value={selectedService}
-                                        onChange={handleServiceSelect}
-                                    >
-                                        <option value="">
-                                            Select a service
-                                        </option>
-                                        {serviceOptions.map((option) => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>,
-                                ].map((el) => (
+                                {["Pet", "Service", "Owner", "Created At", "Actions"].map((el) => (
                                     <th
                                         key={el}
                                         className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -160,7 +171,7 @@ export function Services() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allServices.map(({ serviceName, services }) => {
+                            {filteredServices.map(({ serviceName, services }) => {
                                 const className =
                                     "py-3 px-5 border-b border-blue-gray-50 overflow-hidden";
                                 return services.length > 0
@@ -215,7 +226,7 @@ export function Services() {
                                                     {createdAt}
                                                 </Typography>
                                             </td>
-                                            <td className={className}>
+                                            <td className={className + " flex gap-4"}>
                                                 <Typography
                                                     as="a"
                                                     href={
@@ -231,8 +242,6 @@ export function Services() {
                                                 >
                                                     Edit
                                                 </Typography>
-                                            </td>
-                                            <td className={className}>
                                                 <Typography
                                                     className="text-xs font-semibold text-red-400 cursor-pointer"
                                                     onClick={() =>

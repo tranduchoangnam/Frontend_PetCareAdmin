@@ -6,6 +6,7 @@ import {
     Typography,
     Button,
 } from "@material-tailwind/react";
+import { toast } from "react-toastify";
 
 export function ProfileInfoCard({
     title,
@@ -19,6 +20,7 @@ export function ProfileInfoCard({
     const handleSave = () => {
         if (onSave) {
             onSave(details);
+            window.location.reload();
         }
     };
 
@@ -28,9 +30,9 @@ export function ProfileInfoCard({
                 color="transparent"
                 shadow={false}
                 floated={false}
-                className="mx-0 mt-0 mb-4 flex items-center justify-between gap-4"
+                className="mx-0 mt-0 mb-4 flex items-center justify-start gap-4"
             >
-                <Typography variant="h6" color="blue-gray">
+                <Typography variant="h5" color="blue-gray" style={{ marginRight: '100px' }}>
                     {title}
                 </Typography>
                 {action}
@@ -58,47 +60,27 @@ export function ProfileInfoCard({
                                 >
                                     {el}:
                                 </Typography>
-                                {details[el] !== null ? (
-                                    typeof details[el] === "string" ? (
-                                        editable ? (
-                                            <input
-                                                onChange={(e) => {
-                                                    setDetails((prev) => ({
-                                                        ...prev,
-                                                        [el]: e.target.value,
-                                                    }));
-                                                }}
-                                                value={details[el]}
-                                            />
-                                        ) : (
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-blue-gray-500"
-                                            >
-                                                {details[el]}
-                                            </Typography>
-                                        )
-                                    ) : typeof details[el] === "boolean" ? (
-                                        <Typography
-                                            variant="small"
-                                            className="font-normal text-blue-gray-500"
-                                        >
-                                            {details[el] ? "Yes" : "No"}
-                                        </Typography>
-                                    ) : (
-                                        <Typography
-                                            variant="small"
-                                            className="font-normal text-blue-gray-500"
-                                        >
-                                            {details[el]}
-                                        </Typography>
-                                    )
+                                {editable ? (
+                                    <input
+                                        type="text"
+                                        onChange={(e) => {
+                                            setDetails((prev) => ({
+                                                ...prev,
+                                                [el]: e.target.value,
+                                            }));
+                                        }}
+                                        value={details[el] === "N/A" ? "" : details[el]}
+                                        placeholder="Enter value"
+                                        className="border border-blue-gray-200 p-1 rounded-md"
+                                    />
                                 ) : (
                                     <Typography
                                         variant="small"
                                         className="font-normal text-blue-gray-500"
                                     >
-                                        N/A
+                                        {details[el] !== null && details[el] !== "N/A"
+                                            ? details[el]
+                                            : "N/A"}
                                     </Typography>
                                 )}
                             </li>

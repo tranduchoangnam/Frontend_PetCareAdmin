@@ -24,27 +24,27 @@ export const routes = [
         path: "/home",
         element: <Home />,
       },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "profile",
-        path: "/profile",
-        element: <Profile />,
-      },
+      // {
+      //   icon: <UserCircleIcon {...icon} />,
+      //   name: "profile",
+      //   path: "/profile",
+      //   element: <Profile />,
+      // },
       // {
       //   icon: <TableCellsIcon {...icon} />,
       //   name: "tables",
       //   path: "/tables",
       //   element: <Tables />,
       // },
-      {
-        icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
-        path: "/notifications",
-        element: <Notifications />,
-      },
+      // {
+      //   icon: <InformationCircleIcon {...icon} />,
+      //   name: "notifications",
+      //   path: "/notifications",
+      //   element: <Notifications />,
+      // },
       {
         icon: <UserCircleIcon {...icon} />,
-        name: "Demo Users",
+        name: "Users",
         path: "/demo/users",
         element: <Users />,
       },
@@ -55,7 +55,7 @@ export const routes = [
       },
       {
         icon: <UserCircleIcon {...icon} />,
-        name: "Demo Pets",
+        name: "Pets",
         path: "/demo/pets",
         element: <Pets />,
       },
@@ -66,7 +66,7 @@ export const routes = [
       },
       {
         icon: <UserCircleIcon {...icon} />,
-        name: "Demo Services",
+        name: "Services",
         path: "/demo/services",
         element: <Services />,
       },

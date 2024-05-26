@@ -51,6 +51,7 @@ export function Pets() {
                     "breed",
                     "avatar",
                     "ownerId",
+                    "weight"
                 ]}
                 onSubmit={handleFormSubmit}
                 itemName="Pet"
@@ -74,6 +75,7 @@ export function Pets() {
                                     "Name",
                                     "Age",
                                     "Gender",
+                                    "Weight",
                                     "Owner",
                                     "",
                                     <Button
@@ -101,7 +103,7 @@ export function Pets() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allPets.map(
+                            {allPets?.map(
                                 (
                                     {
                                         id,
@@ -109,17 +111,17 @@ export function Pets() {
                                         age,
                                         owner,
                                         gender,
+                                        weight,
                                         breed,
                                         avatar,
                                         ownerId,
                                     },
                                     key,
                                 ) => {
-                                    const className = `py-3 px-5 ${
-                                        key === allPets.length - 1
-                                            ? ""
-                                            : "border-b border-blue-gray-50"
-                                    }`;
+                                    const className = `py-3 px-5 ${key === allPets.length - 1
+                                        ? ""
+                                        : "border-b border-blue-gray-50"
+                                        }`;
 
                                     return (
                                         <tr key={id}>
@@ -174,10 +176,14 @@ export function Pets() {
                                             </td>
                                             <td className={className}>
                                                 <Typography className="text-xs font-semibold text-blue-gray-600">
+                                                    {weight}
+                                                </Typography>
+                                            </td>
+                                            <td className={className}>
+                                                <Typography className="text-xs font-semibold text-blue-gray-600">
                                                     {owner.username}
                                                 </Typography>
                                             </td>
-
                                             <td className={className}>
                                                 <Typography
                                                     as="a"
