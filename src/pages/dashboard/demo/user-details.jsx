@@ -110,26 +110,8 @@ export function UserDetails() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-96">
-                            <Tabs value="app">
-                                <TabsHeader>
-                                    <Tab value="app">
-                                        <HomeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                                        App
-                                    </Tab>
-                                    <Tab value="message">
-                                        <ChatBubbleLeftEllipsisIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
-                                        Message
-                                    </Tab>
-                                    <Tab value="settings">
-                                        <Cog6ToothIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                                        Settings
-                                    </Tab>
-                                </TabsHeader>
-                            </Tabs>
-                        </div>
                     </div>
-                    <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
+                    <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-2">
                         <ProfileInfoCard
                             title="Profile Information"
                             details={userview}
@@ -145,7 +127,7 @@ export function UserDetails() {
                                         x
                                     </span>
                                 ) : (
-                                    <Tooltip content="Edit Profile">
+                                    <Tooltip content="Edit">
                                         <PencilIcon
                                             onClick={() => edit()}
                                             className="h-4 w-4 cursor-pointer text-blue-gray-500"
@@ -155,7 +137,6 @@ export function UserDetails() {
                             }
                         />
                     </div>
-                    {/* Pets */}
                     <div className="px-4 pb-4">
                         <Typography
                             variant="h6"
@@ -235,6 +216,7 @@ export function UserDetails() {
                             </Typography>
                         )}
                     </div>
+                    {/* Pets */}
                 </CardBody>
             </Card>
         </>

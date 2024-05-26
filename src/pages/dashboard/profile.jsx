@@ -24,7 +24,7 @@ import { platformSettingsData, conversationsData, projectsData } from "@/data";
 import { useAuth } from "@/context/AuthProvider";
 
 export function Profile() {
-  const auth=useAuth();
+  const auth = useAuth();
   return (
     <>
       <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
@@ -43,7 +43,7 @@ export function Profile() {
               />
               <div>
                 <Typography variant="h5" color="blue-gray" className="mb-1">
-                  {auth.user?auth.user.username:""}
+                  {auth.user ? auth.user.username : ""}
                 </Typography>
                 <Typography
                   variant="small"
@@ -117,7 +117,7 @@ export function Profile() {
                 ),
               }}
               action={
-                <Tooltip content="Edit Profile">
+                <Tooltip content="Edit">
                   <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500" />
                 </Tooltip>
               }
@@ -201,9 +201,8 @@ export function Profile() {
                               alt={name}
                               size="xs"
                               variant="circular"
-                              className={`cursor-pointer border-2 border-white ${
-                                key === 0 ? "" : "-ml-2.5"
-                              }`}
+                              className={`cursor-pointer border-2 border-white ${key === 0 ? "" : "-ml-2.5"
+                                }`}
                             />
                           </Tooltip>
                         ))}
