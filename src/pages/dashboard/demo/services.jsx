@@ -131,7 +131,7 @@ export function Services() {
                         All Registered Services
                     </Typography>
                 </CardHeader>
-                <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+                <CardBody className="px-0 pt-0 pb-2">
                     <div className="flex justify-end items-center px-5">
                         <Button
                             onClick={handleAddService}
@@ -155,7 +155,7 @@ export function Services() {
                     <table className="w-full min-w-[640px] table-auto mt-4">
                         <thead>
                             <tr>
-                                {["Pet", "Service", "Owner", "Created At", "Actions"].map((el) => (
+                                {["Pet", "Service", "Owner", "Created At", "", ""].map((el) => (
                                     <th
                                         key={el}
                                         className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -223,10 +223,18 @@ export function Services() {
                                                     variant="small"
                                                     color="blueGray"
                                                 >
-                                                    {createdAt}
+                                                    {new Date(createdAt).toLocaleDateString('en-GB', {
+                                                        day: '2-digit',
+                                                        month: 'short',
+                                                        year: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        hour12: false,
+                                                        timeZone: 'UTC'
+                                                    })} UTC
                                                 </Typography>
                                             </td>
-                                            <td className={className + " flex gap-4"}>
+                                            <td className={className}>
                                                 <Typography
                                                     as="a"
                                                     href={
@@ -242,6 +250,8 @@ export function Services() {
                                                 >
                                                     Edit
                                                 </Typography>
+                                            </td>
+                                            <td className={className}>
                                                 <Typography
                                                     className="text-xs font-semibold text-red-400 cursor-pointer"
                                                     onClick={() =>

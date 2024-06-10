@@ -5,6 +5,7 @@ import {
   InformationCircleIcon,
   ServerStackIcon,
   RectangleStackIcon,
+  ServerIcon,
 } from "@heroicons/react/24/solid";
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
@@ -54,7 +55,7 @@ export const routes = [
         hidden: true,
       },
       {
-        icon: <UserCircleIcon {...icon} />,
+        icon: <TableCellsIcon {...icon} />,
         name: "Pets",
         path: "/demo/pets",
         element: <Pets />,
@@ -65,7 +66,7 @@ export const routes = [
         hidden: true,
       },
       {
-        icon: <UserCircleIcon {...icon} />,
+        icon: <ServerIcon {...icon} />,
         name: "Services",
         path: "/demo/services",
         element: <Services />,

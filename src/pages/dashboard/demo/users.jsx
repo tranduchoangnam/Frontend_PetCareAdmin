@@ -71,7 +71,7 @@ export function Users() {
                         All Users
                     </Typography>
                 </CardHeader>
-                <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+                <CardBody className="px-0 pt-0 pb-2">
                     <table className="w-full min-w-[640px] table-auto">
                         <thead>
                             <tr>
@@ -118,11 +118,10 @@ export function Users() {
                                     },
                                     key,
                                 ) => {
-                                    const className = `py-3 px-5 ${
-                                        key === allUser.length - 1
+                                    const className = `py-3 px-5 ${key === allUser.length - 1
                                             ? ""
                                             : "border-b border-blue-gray-50"
-                                    }`;
+                                        }`;
 
                                     return (
                                         <tr key={username}>

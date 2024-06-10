@@ -66,7 +66,7 @@ export function Pets() {
                         All Pets
                     </Typography>
                 </CardHeader>
-                <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+                <CardBody className="px-0 pt-0 pb-2">
                     <table className="w-full min-w-[640px] table-auto">
                         <thead>
                             <tr>

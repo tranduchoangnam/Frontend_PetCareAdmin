@@ -133,7 +133,7 @@ export function Home() {
                             </MenuList>
                         </Menu>
                     </CardHeader>
-                    <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+                    <CardBody className="px-0 pt-0 pb-2">
                         <table className="w-full min-w-[640px] table-auto">
                             <thead>
                                 <tr>
@@ -169,11 +169,10 @@ export function Home() {
                                         },
                                         key,
                                     ) => {
-                                        const className = `py-3 px-5 ${
-                                            key === projectsTableData.length - 1
-                                                ? ""
-                                                : "border-b border-blue-gray-50"
-                                        }`;
+                                        const className = `py-3 px-5 ${key === projectsTableData.length - 1
+                                            ? ""
+                                            : "border-b border-blue-gray-50"
+                                            }`;
 
                                         return (
                                             <tr key={name}>
@@ -208,12 +207,11 @@ export function Home() {
                                                                     alt={name}
                                                                     size="xs"
                                                                     variant="circular"
-                                                                    className={`cursor-pointer border-2 border-white ${
-                                                                        key ===
+                                                                    className={`cursor-pointer border-2 border-white ${key ===
                                                                         0
-                                                                            ? ""
-                                                                            : "-ml-2.5"
-                                                                    }`}
+                                                                        ? ""
+                                                                        : "-ml-2.5"
+                                                                        }`}
                                                                 />
                                                             </Tooltip>
                                                         ),
@@ -240,7 +238,7 @@ export function Home() {
                                                             variant="gradient"
                                                             color={
                                                                 completion ===
-                                                                100
+                                                                    100
                                                                     ? "green"
                                                                     : "blue"
                                                             }
@@ -289,12 +287,11 @@ export function Home() {
                                     className="flex items-start gap-4 py-3"
                                 >
                                     <div
-                                        className={`relative p-1 after:absolute after:-bottom-6 after:left-2/4 after:w-0.5 after:-translate-x-2/4 after:bg-blue-gray-50 after:content-[''] ${
-                                            key ===
+                                        className={`relative p-1 after:absolute after:-bottom-6 after:left-2/4 after:w-0.5 after:-translate-x-2/4 after:bg-blue-gray-50 after:content-[''] ${key ===
                                             ordersOverviewData.length - 1
-                                                ? "after:h-0"
-                                                : "after:h-4/6"
-                                        }`}
+                                            ? "after:h-0"
+                                            : "after:h-4/6"
+                                            }`}
                                     >
                                         {React.createElement(icon, {
                                             className: `!w-5 !h-5 ${color}`,

@@ -57,7 +57,7 @@ export function AddItemModal({ isOpen, onClose, fieldNames, onSubmit }) {
                     <div key={fieldName} className="mb-4">
                         {fieldName === "date" ? (
                             <div>
-                                Date: 
+                                Date: {''}
                                 <DatePicker
                                     className="border-2 border-gray-300"
                                     selected={formData[fieldName]}
@@ -67,13 +67,16 @@ export function AddItemModal({ isOpen, onClose, fieldNames, onSubmit }) {
                             </div>
                         ) : fieldName === "followUp" ? (
                             <label>
-                                <input
-                                    type="checkbox"
-                                    name={fieldName}
-                                    checked={formData[fieldName]}
-                                    onChange={handleCheckboxChange}
-                                />
-                                Follow Up
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    Follow Up
+                                    <input
+                                        style={{ marginLeft: '10px' }}
+                                        type="checkbox"
+                                        name={fieldName}
+                                        checked={formData[fieldName]}
+                                        onChange={handleCheckboxChange}
+                                    />
+                                </div>
                             </label>
                         ) : (
                             <Input
