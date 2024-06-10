@@ -13,10 +13,8 @@ import {
     Button,
 } from "@material-tailwind/react";
 import {
-    HomeIcon,
-    ChatBubbleLeftEllipsisIcon,
-    Cog6ToothIcon,
     PencilIcon,
+    XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { Link, useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
@@ -108,12 +106,10 @@ export function ServiceDetails() {
                             onSave={handleSave}
                             action={
                                 editable ? (
-                                    <span
-                                        className="cursor-pointer"
-                                        onClick={() => edit()}
-                                    >
-                                        x
-                                    </span>
+                                    <Tooltip content="Close">
+                                        <XMarkIcon className="h-4 w-4 cursor-pointer"
+                                            onClick={() => edit()} />
+                                    </Tooltip>
                                 ) : (
                                     <Tooltip content="Edit">
                                         <PencilIcon

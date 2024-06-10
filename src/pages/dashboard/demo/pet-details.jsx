@@ -17,6 +17,7 @@ import {
     ChatBubbleLeftEllipsisIcon,
     Cog6ToothIcon,
     PencilIcon,
+    XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { Link, useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
@@ -114,12 +115,10 @@ export function PetDetails() {
                             setDetails={setPetview}
                             action={
                                 editable ? (
-                                    <span
-                                        className="cursor-pointer"
-                                        onClick={() => edit()}
-                                    >
-                                        x
-                                    </span>
+                                    <Tooltip content="Close">
+                                        <XMarkIcon className="h-4 w-4 cursor-pointer"
+                                            onClick={() => edit()} />
+                                    </Tooltip>
                                 ) : (
                                     <Tooltip content="Edit">
                                         <PencilIcon
@@ -154,41 +153,32 @@ export function PetDetails() {
 
                                                     {services.length > 0 ? (
                                                         <div>
-                                                            {services.map(
-                                                                ({ id, date }) => (
-                                                                    <div
-                                                                        key={id}
-                                                                        className="flex items-center gap-6"
+                                                            {services.map(({ id, date }) => (
+                                                                <div key={id} className="flex items-center gap-6 mb-4">
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        color="blue-gray"
+                                                                        className="font-normal text-blue-gray-500"
                                                                     >
-                                                                        <Typography
-                                                                            variant="h6"
-                                                                            color="blue-gray"
-                                                                            className="mb-2 font-normal text-blue-gray-500"
-                                                                        >
-                                                                            {date}
-                                                                        </Typography>
-                                                                        <a
-                                                                            href={
-                                                                                "/dashboard/demo/services/" +
-                                                                                serviceName.replace(
-                                                                                    / /g,
-                                                                                    "-",
-                                                                                ) +
-                                                                                "/" +
-                                                                                id
-                                                                            }
-                                                                        >
-                                                                            <Button
-                                                                                color="lightBlue"
-                                                                                size="sm"
-                                                                                ripple="light"
-                                                                            >
-                                                                                View
-                                                                            </Button>
-                                                                        </a>
-                                                                    </div>
-                                                                ),
-                                                            )}
+                                                                        {new Date(date).toLocaleDateString('en-GB', {
+                                                                            day: '2-digit',
+                                                                            month: 'short',
+                                                                            year: 'numeric',
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit',
+                                                                            hour12: false,
+                                                                            timeZone: 'UTC'
+                                                                        })} UTC
+                                                                    </Typography>
+                                                                    <a
+                                                                        href={`/dashboard/demo/services/${serviceName.replace(/ /g, '-')}/${id}`}
+                                                                    >
+                                                                        <Button color="lightBlue" size="sm" ripple="light">
+                                                                            View
+                                                                        </Button>
+                                                                    </a>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     ) : (
                                                         <Typography
