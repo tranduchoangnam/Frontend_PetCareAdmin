@@ -39,11 +39,12 @@ export function Users() {
 
     useEffect(() => {
         try {
+            console.log("token", token);
             getAllUser({ token }).then((res) => setUser(res));
         } catch (error) {
             console.error("Error fetching user:", error);
         }
-    }, []);
+    }, [token]);
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
             <AddItemModal
@@ -105,7 +106,7 @@ export function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allUser.map(
+                            {allUser?.map(
                                 (
                                     {
                                         id,
