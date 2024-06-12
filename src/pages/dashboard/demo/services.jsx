@@ -6,6 +6,7 @@ import {
     Avatar,
     Button,
     Tooltip,
+    Chip,
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { getAllRegisteredServices, registerService, deleteService } from "@/utils/api/service";
@@ -18,7 +19,6 @@ export function Services() {
     const [selectedService, setSelectedService] = useState("");
     const [filteredServices, setFilteredServices] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
-
     const serviceOptions = [
         { value: "healthcare", label: "Healthcare Service" },
         { value: "grooming", label: "Grooming Service" },
@@ -104,7 +104,11 @@ export function Services() {
             try {
                 const servicesResponse = await getAllRegisteredServices({ token });
                 setServices(servicesResponse);
-                setFilteredServices(servicesResponse);
+                setFilteredServices(servicesResponse.sort((a, b) => {
+                    const aPending = a.services.some(service => service.status === "pending");
+                    const bPending = b.services.some(service => service.status === "pending");
+                    return bPending - aPending;
+                }));
             } catch (error) {
                 console.error("Error fetching services:", error);
             }
@@ -115,6 +119,7 @@ export function Services() {
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
             <AddItemModal
+                title="Add Service"
                 isOpen={isModalOpen}
                 onClose={handleClose}
                 serviceType={selectedService}
@@ -155,7 +160,7 @@ export function Services() {
                     <table className="w-full min-w-[640px] table-auto mt-4">
                         <thead>
                             <tr>
-                                {["Pet", "Service", "Owner", "Created At", "", ""].map((el) => (
+                                {["Pet", "Service", "Owner", "Created At", "Status", "Action", ""].map((el) => (
                                     <th
                                         key={el}
                                         className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -175,7 +180,7 @@ export function Services() {
                                 const className =
                                     "py-3 px-5 border-b border-blue-gray-50 overflow-hidden";
                                 return services.length > 0
-                                    ? services.map(({ id, pet, createdAt }) => (
+                                    ? services.map(({ id, pet, createdAt, status }) => (
                                         <tr key={id}>
                                             <td
                                                 className={
@@ -233,6 +238,24 @@ export function Services() {
                                                         timeZone: 'UTC'
                                                     })} UTC
                                                 </Typography>
+                                            </td>
+                                            <td className={className}>
+                                                <Chip
+                                                    variant="gradient"
+                                                    color={
+                                                        status == "pending"
+                                                            ? "yellow"
+                                                            : status == "rejected"
+                                                                ? "red"
+                                                                : status == "approved"
+                                                                    ? "blue"
+                                                                    : status == "completed"
+                                                                        ? "green"
+                                                                        : "gray"
+                                                    }
+                                                    value={status}
+                                                    className="py-0.5 px-2 text-[11px] font-medium w-fit"
+                                                />
                                             </td>
                                             <td className={className}>
                                                 <Typography
