@@ -11,7 +11,9 @@ import {
 } from "@material-tailwind/react";
 import { getAllPets, addPet, deletePet } from "@/utils/api/pet";
 import { useState, useEffect } from "react";
-import { AddItemModal } from "@/widgets/modals";
+import AddPetModal from "@/widgets/modals/add-pet-modal";
+import { getAllUser } from "@/utils/api/user";
+import { toast } from "react-toastify";
 
 export function Pets() {
     const [allPets, setPets] = useState([]);
@@ -27,9 +29,25 @@ export function Pets() {
     };
     const handleClose = () => setModalOpen(false);
     const handleFormSubmit = (formData) => {
-        addPet({ token, data: formData })
+        const { ownerEmail, ...rest } = formData;
+        getAllUser({ token })
+            .then((users) => {
+                const owner = users.find((user) => user.email === ownerEmail);
+                if (!owner) {
+                    toast.error("Owner not found");
+                    return;
+                }
+                const newPetData = {
+                    ...rest,
+                    ownerId: owner.id,
+                };
+                return addPet({ token, data: newPetData });
+            })
             .then(() => getAllPets({ token }))
-            .then((res) => setPets(res))
+            .then((res) => {
+                setPets(res);
+                setModalOpen(false);
+            })
             .catch((error) => console.error("Error adding pet:", error));
     };
 
@@ -40,17 +58,17 @@ export function Pets() {
     }, []);
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
-            <AddItemModal
+            <AddPetModal
                 isOpen={isModalOpen}
                 onClose={handleClose}
                 fieldNames={[
+                    "ownerEmail",
                     "name",
                     "age",
                     "color",
                     "gender",
                     "breed",
                     "avatar",
-                    "ownerId",
                     "weight"
                 ]}
                 onSubmit={handleFormSubmit}
