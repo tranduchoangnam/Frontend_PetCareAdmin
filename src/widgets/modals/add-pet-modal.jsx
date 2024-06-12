@@ -11,7 +11,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export function AddItemModal({ title, isOpen, onClose, fieldNames, onSubmit }) {
+export function AddPetModal({ isOpen, onClose, fieldNames, onSubmit }) {
     const [formData, setFormData] = useState({});
 
     const handleChange = (e) => {
@@ -29,14 +29,6 @@ export function AddItemModal({ title, isOpen, onClose, fieldNames, onSubmit }) {
         });
     };
 
-    const handleCheckboxChange = (e) => {
-        const { name, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: checked,
-        });
-    };
-
     const handleSubmit = () => {
         console.log("Form Data:", formData);
         onSubmit(formData);
@@ -51,7 +43,7 @@ export function AddItemModal({ title, isOpen, onClose, fieldNames, onSubmit }) {
 
     return (
         <Dialog open={isOpen} handler={onClose}>
-            <DialogHeader>{title}</DialogHeader>
+            <DialogHeader>Add Pet</DialogHeader>
             <DialogBody divider>
                 {fieldNames.map((fieldName) => (
                     <div key={fieldName} className="mb-4">
@@ -65,19 +57,6 @@ export function AddItemModal({ title, isOpen, onClose, fieldNames, onSubmit }) {
                                     dateFormat="yyyy-MM-dd"
                                 />
                             </div>
-                        ) : fieldName === "followUp" ? (
-                            <label>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    Follow Up
-                                    <input
-                                        style={{ marginLeft: '10px' }}
-                                        type="checkbox"
-                                        name={fieldName}
-                                        checked={formData[fieldName]}
-                                        onChange={handleCheckboxChange}
-                                    />
-                                </div>
-                            </label>
                         ) : (
                             <Input
                                 type="text"
@@ -107,10 +86,10 @@ export function AddItemModal({ title, isOpen, onClose, fieldNames, onSubmit }) {
     );
 }
 
-AddItemModal.propTypes = {
+AddPetModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     fieldNames: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default AddItemModal;
+export default AddPetModal;

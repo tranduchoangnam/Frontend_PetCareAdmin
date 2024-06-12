@@ -47,6 +47,7 @@ export function Users() {
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
             <AddItemModal
+                title="Add User"
                 isOpen={isModalOpen}
                 onClose={handleClose}
                 fieldNames={[
@@ -119,8 +120,8 @@ export function Users() {
                                     key,
                                 ) => {
                                     const className = `py-3 px-5 ${key === allUser.length - 1
-                                            ? ""
-                                            : "border-b border-blue-gray-50"
+                                        ? ""
+                                        : "border-b border-blue-gray-50"
                                         }`;
 
                                     return (
