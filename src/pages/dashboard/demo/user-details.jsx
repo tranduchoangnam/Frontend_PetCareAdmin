@@ -2,37 +2,30 @@ import {
     Card,
     CardBody,
     CardHeader,
-    CardFooter,
     Avatar,
     Typography,
-    Tabs,
-    TabsHeader,
-    Tab,
-    Switch,
     Tooltip,
     Button,
     Chip,
 } from "@material-tailwind/react";
 import {
-    HomeIcon,
-    ChatBubbleLeftEllipsisIcon,
-    Cog6ToothIcon,
     PencilIcon,
     XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { useParams } from "react-router-dom";
-import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
+import { ProfileInfoCard } from "@/widgets/cards";
 import { useState, useEffect } from "react";
 import { getUserDetails, updateUser } from "@/utils/api/user";
 // import { userDetails, allPets } from "@/data/test";
 import { getAllPetsOfOwner } from "@/utils/api/pet";
+import { useAuth } from "@/context/AuthProvider";
 
 export function UserDetails() {
+    const { token } = useAuth();
     const [userDetails, setUser] = useState(null);
     const [userview, setUserview] = useState(null);
     const [editable, setEditable] = useState(false);
     const [allPets, setPets] = useState([]);
-    const [token, setToken] = useState(localStorage.getItem("token") || "");
     const { id } = useParams();
 
     const edit = () => {

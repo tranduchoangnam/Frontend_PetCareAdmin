@@ -17,35 +17,132 @@ import { EllipsisVerticalIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { StatisticsCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
 import {
-    statisticsCardsData,
     statisticsChartsData,
     projectsTableData,
     ordersOverviewData,
 } from "@/data";
-import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, ClockIcon, BanknotesIcon, UsersIcon, TagIcon, ServerStackIcon } from "@heroicons/react/24/solid";
+import { useState, useEffect } from "react";
+import { getCurrentRevenue, getRevenueGrowth } from "@/utils/api/revenue";
+import { getClientNumber } from "@/utils/api/user";
+import { getPetNumber } from "@/utils/api/pet";
+import { getRegisteredServiceNumber } from "@/utils/api/service";
+import { useAuth } from "@/context/AuthProvider";
 
-export function Home() {
+export function Dashboard() {
+    const { token } = useAuth();
+    const [currentRevenue, setCurrentRevenue] = useState(null);
+    const [revenueGrowth, setRevenueGrowth] = useState(null);
+    const [currentClients, setCurrentClients] = useState(null);
+    const [currentPets, setCurrentPets] = useState(null);
+    const [currentServices, setCurrentServices] = useState(null);
+    useEffect(() => {
+        try {
+            getCurrentRevenue({ token, serviceName: "all" }).then((res) => {
+                setCurrentRevenue(res.total);
+            });
+            getRevenueGrowth({ token, serviceName: "all" }).then((res) => {
+                setRevenueGrowth(res);
+                console.log("revenue growth", res);
+            });
+        } catch (error) {
+            console.error("Error fetching revenue:", error);
+        }
+    }, []);
+    useEffect(() => {
+        try {
+            getClientNumber({ token }).then((res) => {
+                setCurrentClients(res);
+            });
+        } catch (error) {
+            console.error("Error fetching client number:", error);
+        }
+    }, []);
+    useEffect(() => {
+        try {
+            getPetNumber({ token }).then((res) => {
+                setCurrentPets(res);
+            });
+        } catch (error) {
+            console.error("Error fetching pet number:", error);
+        }
+    }, []);
+    useEffect(() => {
+        try {
+            getRegisteredServiceNumber({ token }).then((res) => {
+                setCurrentServices(res);
+            });
+        } catch (error) {
+            console.error("Error fetching service number:", error);
+        }
+    }, []);
     return (
         <div className="mt-12">
             <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-                {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
-                    <StatisticsCard
-                        key={title}
-                        {...rest}
-                        title={title}
-                        icon={React.createElement(icon, {
-                            className: "w-6 h-6 text-white",
-                        })}
-                        footer={
-                            <Typography className="font-normal text-blue-gray-600">
-                                <strong className={footer.color}>
-                                    {footer.value}
-                                </strong>
-                                &nbsp;{footer.label}
-                            </Typography>
-                        }
-                    />
-                ))}
+                <StatisticsCard
+                            color="gray"
+                            value={currentRevenue}
+                            title="Current Revenue"
+                            icon={React.createElement(BanknotesIcon, {
+                                className: "w-6 h-6 text-white",
+                            })}
+                            footer={
+                                <Typography className="font-normal text-blue-gray-600">
+                                    <strong className="text-green-500">
+                                    +{revenueGrowth}
+                                    </strong>
+                                    &nbsp;today
+                                </Typography>
+                            }
+                        />
+                        <StatisticsCard
+                            color="gray"
+                            value={currentClients}
+                            title="Current Clients"
+                            icon={React.createElement(UsersIcon, {
+                                className: "w-6 h-6 text-white",
+                            })}
+                            footer={
+                                <Typography className="font-normal text-blue-gray-600">
+                                    <strong className="text-green-500">
+                                        +50%
+                                    </strong>
+                                    &nbsp;today
+                                </Typography>
+                            }
+                        />
+                        <StatisticsCard
+                            color="gray"
+                            value={currentPets}
+                            title="Current Pet Profiles"
+                            icon={React.createElement(TagIcon, {
+                                className: "w-6 h-6 text-white",
+                            })}
+                            footer={
+                                <Typography className="font-normal text-blue-gray-600">
+                                    <strong className="text-green-500">
+                                        +50%
+                                    </strong>
+                                    &nbsp;today
+                                </Typography>
+                            }
+                        />
+                        <StatisticsCard
+                            color="gray"
+                            value={currentServices}
+                            title="Registered Services"
+                            icon={React.createElement(ServerStackIcon, {
+                                className: "w-6 h-6 text-white",
+                            })}
+                            footer={
+                                <Typography className="font-normal text-blue-gray-600">
+                                    <strong className="text-green-500">
+                                        +50%
+                                    </strong>
+                                    &nbsp;today
+                                </Typography>
+                            }
+                        />
             </div>
             <div className="mb-6">
                 <StatisticsChart
@@ -323,4 +420,4 @@ export function Home() {
     );
 }
 
-export default Home;
+export default Dashboard;

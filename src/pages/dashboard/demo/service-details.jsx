@@ -1,32 +1,26 @@
 import {
     Card,
     CardBody,
-    CardHeader,
-    CardFooter,
     Avatar,
     Typography,
-    Tabs,
-    TabsHeader,
-    Tab,
-    Switch,
     Tooltip,
-    Button,
 } from "@material-tailwind/react";
 import {
     PencilIcon,
     XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { Link, useParams } from "react-router-dom";
-import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
+import { useParams } from "react-router-dom";
+import { ProfileInfoCard } from "@/widgets/cards";
 import { useState, useEffect } from "react";
 import { getServiceDetails, updateService } from "@/utils/api/service";
+import { useAuth } from "@/context/AuthProvider";
 
 export function ServiceDetails() {
+    const { token } = useAuth();
     const [serviceDetails, setService] = useState(null);
     const [serviceview, setServiceview] = useState(null);
     const [pet, setPet] = useState(null);
     const [editable, setEditable] = useState(false);
-    const [token, setToken] = useState(localStorage.getItem("token") || "");
     const { serviceName, id } = useParams();
     const serviceApi = serviceName.replace(/ /g, "-");
     // console.log(serviceName, id)

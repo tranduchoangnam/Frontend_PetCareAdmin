@@ -13,6 +13,19 @@ export const getAllPets = async (payload) => {
     }
 };
 
+export const getPetNumber = async (payload) => {
+    try {
+        const response = await axiosInstance.get("/pets/number", {
+            headers: {
+                Authorization: `Bearer ${payload.token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}
+
 export const getPetDetails = async (payload) => {
     try {
         const response = await axiosInstance.get(`/pets/${payload.id}`, {

@@ -18,6 +18,22 @@ export const registerService = async (payload) => {
     }
 };
 
+export const getRegisteredServiceNumber = async (payload) => {
+    try {
+        const response = await axiosInstance.get(
+            "/services/all-registered-services-number",
+            {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+            },
+        );
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}
+
 export const getRegisteredServiceByPet = async (payload) => {
     try {
         const response = await axiosInstance.get(

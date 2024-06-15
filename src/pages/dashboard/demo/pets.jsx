@@ -5,8 +5,6 @@ import {
     Typography,
     Avatar,
     Chip,
-    Tooltip,
-    Progress,
     Button,
 } from "@material-tailwind/react";
 import { getAllPets, addPet, deletePet } from "@/utils/api/pet";
@@ -14,10 +12,11 @@ import { useState, useEffect } from "react";
 import AddPetModal from "@/widgets/modals/add-pet-modal";
 import { getAllUser } from "@/utils/api/user";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthProvider";
 
 export function Pets() {
+    const { token } = useAuth();
     const [allPets, setPets] = useState([]);
-    const [token, setToken] = useState(localStorage.getItem("token") || "");
     const [isModalOpen, setModalOpen] = useState(false);
 
     const handleOpen = () => setModalOpen(true);
