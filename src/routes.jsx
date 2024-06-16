@@ -7,9 +7,8 @@ import {
   RectangleStackIcon,
   ServerIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
-import { PetDetails, Pets, Services, UserDetails, Users, ServiceDetails } from "@/pages/dashboard/demo";
+import { PetDetails, Pets, Services, UserDetails, Users, ServiceDetails, Dashboard } from "@/pages/dashboard/demo";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -22,27 +21,16 @@ export const routes = [
       {
         icon: <HomeIcon {...icon} />,
         name: "dashboard",
-        path: "/home",
-        element: <Home />,
+        path: "/",
+        element: <Dashboard />,
+        hidden: true,
       },
-      // {
-      //   icon: <UserCircleIcon {...icon} />,
-      //   name: "profile",
-      //   path: "/profile",
-      //   element: <Profile />,
-      // },
-      // {
-      //   icon: <TableCellsIcon {...icon} />,
-      //   name: "tables",
-      //   path: "/tables",
-      //   element: <Tables />,
-      // },
-      // {
-      //   icon: <InformationCircleIcon {...icon} />,
-      //   name: "notifications",
-      //   path: "/notifications",
-      //   element: <Notifications />,
-      // },
+      {
+        icon: <HomeIcon {...icon} />,
+        name: "dashboard",
+        path: "/home",
+        element: <Dashboard />,
+      },
       {
         icon: <UserCircleIcon {...icon} />,
         name: "Users",

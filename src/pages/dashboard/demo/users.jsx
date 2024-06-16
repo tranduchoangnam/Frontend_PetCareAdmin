@@ -5,17 +5,17 @@ import {
     Typography,
     Avatar,
     Chip,
-    Tooltip,
     Button,
 } from "@material-tailwind/react";
 // import { allUsersData } from "@/data/test";
 import { getAllUser, registerUser, deleteUser } from "@/utils/api/user";
 import { useState, useEffect } from "react";
 import { AddItemModal } from "@/widgets/modals";
+import { useAuth } from "@/context/AuthProvider";
 
 export function Users() {
     const [allUser, setUser] = useState([]);
-    const [token, setToken] = useState(localStorage.getItem("token") || "");
+    const { token } = useAuth();
     const [isModalOpen, setModalOpen] = useState(false);
 
     const handleOpen = () => setModalOpen(true);

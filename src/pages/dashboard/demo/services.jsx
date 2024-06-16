@@ -5,16 +5,16 @@ import {
     Typography,
     Avatar,
     Button,
-    Tooltip,
     Chip,
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { getAllRegisteredServices, registerService, deleteService } from "@/utils/api/service";
 import { AddItemModal } from "@/widgets/modals";
+import { useAuth } from "@/context/AuthProvider";
 
 export function Services() {
+    const { token } = useAuth();
     const [allServices, setServices] = useState([]);
-    const [token, setToken] = useState(localStorage.getItem("token") || "");
     const [serviceApi, setServiceApi] = useState(null);
     const [selectedService, setSelectedService] = useState("");
     const [filteredServices, setFilteredServices] = useState([]);

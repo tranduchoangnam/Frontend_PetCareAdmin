@@ -27,6 +27,19 @@ export const getAllUser = async (payload) => {
     }
 };
 
+export const getClientNumber = async (payload) => {
+    try {
+        const response = await axiosInstance.get("/users/client-number", {
+            headers: {
+                Authorization: `Bearer ${payload.token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}
+
 export const getUserDetails = async (payload) => {
     try {
         const response = await axiosInstance.get(`/users/${payload.id}`, {
