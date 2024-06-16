@@ -1,6 +1,24 @@
 import axiosInstance from "@/configs/axiosInstance";
 
 
+export const completeService = async (payload) => {
+    try {
+        const response = await axiosInstance.patch(
+            `${payload.serviceName}/complete/${payload.id}`,
+            payload.data,
+            {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+            },
+        );
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}
+
+
 export const registerService = async (payload) => {
     try {
         const response = await axiosInstance.post(
@@ -22,6 +40,22 @@ export const getRegisteredServiceNumber = async (payload) => {
     try {
         const response = await axiosInstance.get(
             "/services/all-registered-services-number",
+            {
+                headers: {
+                    Authorization: `Bearer ${payload.token}`,
+                },
+            },
+        );
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}
+
+export const getSingleServiceNumber = async (payload) => {
+    try {
+        const response = await axiosInstance.get(
+            `/${payload.serviceName}/count`,
             {
                 headers: {
                     Authorization: `Bearer ${payload.token}`,

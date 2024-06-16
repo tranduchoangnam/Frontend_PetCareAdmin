@@ -13,6 +13,7 @@ import AddPetModal from "@/widgets/modals/add-pet-modal";
 import { getAllUser } from "@/utils/api/user";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthProvider";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 export function Pets() {
     const { token } = useAuth();
@@ -208,19 +209,21 @@ export function Pets() {
                                                         "/dashboard/demo/pets/pet-details/" +
                                                         id
                                                     }
-                                                    className="text-xs font-semibold text-blue-gray-600"
+                                                    className="text-xs font-semibold text-blue-gray-600 flex"
                                                 >
                                                     Edit
+                                                    <PencilSquareIcon className="h-4 w-4 ml-1" />
                                                 </Typography>
                                             </td>
                                             <td className={className}>
                                                 <Typography
-                                                    className="text-xs font-semibold text-red-400 cursor-pointer"
+                                                    className="text-xs font-semibold text-red-400 cursor-pointer flex"
                                                     onClick={() =>
                                                         handleDelete(id)
                                                     }
                                                 >
                                                     Delete
+                                                    <TrashIcon className="h-4 w-4 ml-1" />
                                                 </Typography>
                                             </td>
                                         </tr>

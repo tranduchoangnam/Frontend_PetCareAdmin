@@ -7,7 +7,7 @@ import {
     Button,
 } from "@material-tailwind/react";
 import {
-    PencilIcon,
+    PencilSquareIcon,
     XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { useParams } from "react-router-dom";
@@ -111,7 +111,7 @@ export function PetDetails() {
                                     </Tooltip>
                                 ) : (
                                     <Tooltip content="Edit">
-                                        <PencilIcon
+                                        <PencilSquareIcon
                                             onClick={() => edit()}
                                             className="h-4 w-4 cursor-pointer text-blue-gray-500"
                                         />

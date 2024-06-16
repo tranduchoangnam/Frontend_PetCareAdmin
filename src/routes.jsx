@@ -9,6 +9,8 @@ import {
 } from "@heroicons/react/24/solid";
 import { SignIn, SignUp } from "@/pages/auth";
 import { PetDetails, Pets, Services, UserDetails, Users, ServiceDetails, Dashboard } from "@/pages/dashboard/demo";
+import { element } from "prop-types";
+import ApprovedServices from "./pages/dashboard/demo/approved-services";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -64,6 +66,12 @@ export const routes = [
         element: <ServiceDetails />,
         hidden: true,
       },
+      {
+        icon: <InformationCircleIcon {...icon} />,
+        name: "Approved Services",
+        path: "/demo/approved-services",
+        element: <ApprovedServices />,
+      }
     ],
   },
   {

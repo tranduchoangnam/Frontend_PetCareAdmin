@@ -12,6 +12,7 @@ import { getAllUser, registerUser, deleteUser } from "@/utils/api/user";
 import { useState, useEffect } from "react";
 import { AddItemModal } from "@/widgets/modals";
 import { useAuth } from "@/context/AuthProvider";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 
 export function Users() {
     const [allUser, setUser] = useState([]);
@@ -178,19 +179,21 @@ export function Users() {
                                                         "/dashboard/demo/users/user-details/" +
                                                         id
                                                     }
-                                                    className="text-xs font-semibold text-blue-gray-600"
+                                                    className="text-xs font-semibold text-blue-gray-600 flex"
                                                 >
                                                     Edit
+                                                    <PencilSquareIcon className="h-4 w-4 ml-1" />
                                                 </Typography>
                                             </td>
                                             <td className={className}>
                                                 <Typography
-                                                    className="text-xs font-semibold text-red-400 cursor-pointer"
+                                                    className="text-xs font-semibold text-red-400 cursor-pointer flex"
                                                     onClick={() =>
                                                         handleDelete(id)
                                                     }
                                                 >
                                                     Delete
+                                                    <TrashIcon className="h-4 w-4 ml-1" />
                                                 </Typography>
                                             </td>
                                         </tr>
