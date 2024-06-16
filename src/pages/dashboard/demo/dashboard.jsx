@@ -26,8 +26,9 @@ import { useState, useEffect } from "react";
 import { getCurrentRevenue, getRevenueGrowth } from "@/utils/api/revenue";
 import { getClientNumber } from "@/utils/api/user";
 import { getPetNumber } from "@/utils/api/pet";
-import { getRegisteredServiceNumber } from "@/utils/api/service";
+import { getRegisteredServiceNumber, getSingleServiceNumber } from "@/utils/api/service";
 import { useAuth } from "@/context/AuthProvider";
+import { serviceOptions, api } from "@/constants/service";
 
 export function Dashboard() {
     const { token } = useAuth();
@@ -36,6 +37,7 @@ export function Dashboard() {
     const [currentClients, setCurrentClients] = useState(null);
     const [currentPets, setCurrentPets] = useState(null);
     const [currentServices, setCurrentServices] = useState(null);
+    const [serviceCount, setServiceCount] = useState([]);
     useEffect(() => {
         try {
             getCurrentRevenue({ token, serviceName: "all" }).then((res) => {
@@ -45,26 +47,23 @@ export function Dashboard() {
                 setRevenueGrowth(res);
                 console.log("revenue growth", res);
             });
-        } catch (error) {
-            console.error("Error fetching revenue:", error);
-        }
-    }, []);
-    useEffect(() => {
-        try {
             getClientNumber({ token }).then((res) => {
                 setCurrentClients(res);
             });
-        } catch (error) {
-            console.error("Error fetching client number:", error);
-        }
-    }, []);
-    useEffect(() => {
-        try {
             getPetNumber({ token }).then((res) => {
                 setCurrentPets(res);
             });
+            Promise.all([
+                getSingleServiceNumber({ token, serviceName: "healthcare-service" }),
+                getSingleServiceNumber({ token, serviceName: "grooming-service" }),
+                getSingleServiceNumber({ token, serviceName: "boarding-service" }),
+                getSingleServiceNumber({ token, serviceName: "appointment-service" })
+            ]).then((res) => {
+                console.log(res)
+                setServiceCount(res);
+            });
         } catch (error) {
-            console.error("Error fetching pet number:", error);
+            console.error("Error fetching data:", error);
         }
     }, []);
     useEffect(() => {
@@ -78,7 +77,7 @@ export function Dashboard() {
     }, []);
     return (
         <div className="mt-12">
-            <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mb-6 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
                 <StatisticsCard
                             color="gray"
                             value={currentRevenue}
@@ -144,6 +143,29 @@ export function Dashboard() {
                             }
                         />
             </div>
+            Services
+                        <div className="mb-12 mt-6 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+                        {serviceOptions.map(({value, label}, i) => {
+                            return (
+                                <StatisticsCard
+                                    color="gray"
+                                    value={serviceCount[i++]}
+                                    title={label}
+                                    icon={React.createElement(ServerStackIcon, {
+                                        className: "w-6 h-6 text-white",
+                                    })}
+                                    footer={
+                                        <Typography className="font-normal text-blue-gray-600">
+                                            <strong className="text-green-500">
+                                                +50%
+                                            </strong>
+                                            &nbsp;today
+                                        </Typography>
+                                    }
+                                />
+                            );
+                        })}
+                        </div>
             <div className="mb-6">
                 <StatisticsChart
                     key={statisticsChartsData[1].title}

@@ -11,6 +11,8 @@ import { useState, useEffect } from "react";
 import { getAllRegisteredServices, registerService, deleteService } from "@/utils/api/service";
 import { AddItemModal } from "@/widgets/modals";
 import { useAuth } from "@/context/AuthProvider";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { serviceOptions, api } from "@/constants/service";
 
 export function Services() {
     const { token } = useAuth();
@@ -19,19 +21,6 @@ export function Services() {
     const [selectedService, setSelectedService] = useState("");
     const [filteredServices, setFilteredServices] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
-    const serviceOptions = [
-        { value: "healthcare", label: "Healthcare Service" },
-        { value: "grooming", label: "Grooming Service" },
-        { value: "boarding", label: "Boarding Service" },
-        { value: "appointment", label: "Appointment" },
-    ];
-
-    const api = {
-        healthcare: "healthcare-service",
-        grooming: "grooming-service",
-        boarding: "boarding-service",
-        appointment: "appointment-service",
-    };
 
     const serviceFields = {
         healthcare: [
@@ -269,14 +258,15 @@ export function Services() {
                                                         "/" +
                                                         id
                                                     }
-                                                    className="text-xs font-semibold text-blue-gray-600"
+                                                    className="text-xs font-semibold text-blue-gray-600 flex"
                                                 >
                                                     Edit
+                                                    <PencilSquareIcon className="h-4 w-4 ml-1" />
                                                 </Typography>
                                             </td>
                                             <td className={className}>
                                                 <Typography
-                                                    className="text-xs font-semibold text-red-400 cursor-pointer"
+                                                    className="text-xs font-semibold text-red-400 cursor-pointer flex"
                                                     onClick={() =>
                                                         handleDelete(id, serviceName.replace(
                                                             / /g,
@@ -284,7 +274,7 @@ export function Services() {
                                                         ))
                                                     }
                                                 >
-                                                    Delete
+                                                    Delete <TrashIcon className="h-4 w-4 ml-1" />
                                                 </Typography>
                                             </td>
                                         </tr>

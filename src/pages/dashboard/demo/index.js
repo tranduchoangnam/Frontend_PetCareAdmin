@@ -5,3 +5,4 @@ export * from "@/pages/dashboard/demo/pet-details";
 export * from "@/pages/dashboard/demo/services";
 export * from "@/pages/dashboard/demo/service-details";
 export * from "@/pages/dashboard/demo/dashboard";
+export * from "@/pages/dashboard/demo/approved-services";
