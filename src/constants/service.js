@@ -11,3 +11,10 @@ export const api = {
     boarding: "boarding-service",
     appointment: "appointment-service",
 };
+
+export const serviceId = {
+    healthcare: "healthcare",
+    grooming: "grooming",
+    boarding: "boarding",
+    appointment: "appointment",
+}

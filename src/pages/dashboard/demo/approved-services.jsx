@@ -12,6 +12,7 @@ import { getAllRegisteredServices, completeService } from "@/utils/api/service";
 import { useAuth } from "@/context/AuthProvider";
 import { DocumentCheckIcon } from "@heroicons/react/24/solid";
 import { serviceOptions } from "@/constants/service";
+import { toast } from "react-toastify";
 
 export function ApprovedServices() {
     const { token } = useAuth();
@@ -23,14 +24,19 @@ export function ApprovedServices() {
         const selectedService = event.target.value;
         setSelectedService(selectedService);
 
-        const filtered = allServices.filter(service =>
-            selectedService ? service.serviceName.toLowerCase().includes(selectedService.toLowerCase()) : true
+        const filtered = allServices.filter((service) =>
+            selectedService
+                ? service.serviceName
+                      .toLowerCase()
+                      .includes(selectedService.toLowerCase())
+                : true,
         );
         filterApproved(filtered);
     };
 
     const handleCompleteService = (id, serviceName) => {
         completeService({ token, id, serviceName }).then(() => {
+            toast.success("Change status successfully");
             const updatedServices = allServices.map((service) => {
                 if (service.id === id) {
                     service.status = "completed";
@@ -38,21 +44,30 @@ export function ApprovedServices() {
                 return service;
             });
             setServices(updatedServices);
-            const filtered = updatedServices.filter(service =>
-                selectedService ? service.serviceName.toLowerCase().includes(selectedService.toLowerCase()) : true
+            const filtered = updatedServices.filter((service) =>
+                selectedService
+                    ? service.serviceName
+                          .toLowerCase()
+                          .includes(selectedService.toLowerCase())
+                    : true,
             );
             filterApproved(filtered);
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
         });
     };
 
     const filterApproved = (servicesResponse) => {
         setFilteredServices(
             servicesResponse
-                .map(service => ({
+                .map((service) => ({
                     ...service,
-                    services: service.services.filter(s => s.status === "approved"),
+                    services: service.services.filter(
+                        (s) => s.status === "approved",
+                    ),
                 }))
-                .filter(service => service.services.length > 0)
+                .filter((service) => service.services.length > 0),
         );
     };
 

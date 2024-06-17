@@ -25,20 +25,20 @@ export function ProfileInfoCard({
         }
     };
 
-    const handleAddMedicine = () => {
-        setDetails((prev) => ({
-            ...prev,
-            medicine: [...(prev.medicine || []), ""],
-        }));
-    };
+    // const handleAddMedicine = () => {
+    //     setDetails((prev) => ({
+    //         ...prev,
+    //         medicine: [...(prev.medicine || []), ""],
+    //     }));
+    // };
 
-    const handleMedicineChange = (index, value) => {
-        setDetails((prev) => {
-            const updatedMedicine = [...prev.medicine];
-            updatedMedicine[index] = value;
-            return { ...prev, medicine: updatedMedicine };
-        });
-    };
+    // const handleMedicineChange = (index, value) => {
+    //     setDetails((prev) => {
+    //         const updatedMedicine = [...prev.medicine];
+    //         updatedMedicine[index] = value;
+    //         return { ...prev, medicine: updatedMedicine };
+    //     });
+    // };
 
     const handleStatusChange = (value) => {
         setDetails((prev) => ({
@@ -77,27 +77,6 @@ export function ProfileInfoCard({
                         timeZone: 'UTC'
                     })} UTC
                 </Typography>
-            );
-        } else if (el === "medicine") {
-            return (
-                <div className="flex flex-col gap-2">
-                    {(details.medicine || []).map((med, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            onChange={(e) => handleMedicineChange(index, e.target.value)}
-                            value={med}
-                            placeholder="Enter value"
-                            className="border border-blue-gray-200 p-1 rounded-md"
-                        />
-                    ))}
-                    <Button
-                        onClick={handleAddMedicine}
-                        className="mt-2"
-                    >
-                        + Add Medicine
-                    </Button>
-                </div>
             );
         } else {
             return (
@@ -145,7 +124,7 @@ export function ProfileInfoCard({
                 {details && (
                     <ul className="flex flex-col gap-4 p-0">
                         {Object.keys(details).map((el, key) => (
-                            el !== "isDeleted" && (
+                            el!=="additionalInfo" &&el !== "isDeleted" && (
                                 <li key={key} className="flex items-center justify-between gap-4">
                                     <Typography
                                         variant="small"

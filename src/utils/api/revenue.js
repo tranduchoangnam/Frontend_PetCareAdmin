@@ -25,3 +25,17 @@ export const getRevenueGrowth = async (payload) => {
         console.log("error", err);
     }
 }
+
+
+export const getRevenueHistory = async (payload) =>{
+    try {
+        const response = await axiosInstance.get(`/revenue/history/${payload.serviceName}`, {
+            headers: {
+                Authorization: `Bearer ${payload.token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log("error", err);
+    }
+}

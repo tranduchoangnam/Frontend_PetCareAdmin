@@ -12,12 +12,13 @@ import { getAllRegisteredServices, registerService, deleteService } from "@/util
 import { AddItemModal } from "@/widgets/modals";
 import { useAuth } from "@/context/AuthProvider";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
-import { serviceOptions, api } from "@/constants/service";
+import { serviceOptions, api, serviceId } from "@/constants/service";
 
 export function Services() {
     const { token } = useAuth();
     const [allServices, setServices] = useState([]);
     const [serviceApi, setServiceApi] = useState(null);
+    const [selectedServiceId, setSelectedServiceId] = useState(null);
     const [selectedService, setSelectedService] = useState("");
     const [filteredServices, setFilteredServices] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
@@ -47,7 +48,7 @@ export function Services() {
         const selectedService = event.target.value;
         setSelectedService(selectedService);
         setServiceApi(api[selectedService]);
-
+        setSelectedServiceId(serviceId[selectedService]);
         const filtered = allServices.filter(service =>
             service.serviceName.toLowerCase().includes(selectedService)
         );
@@ -60,6 +61,7 @@ export function Services() {
 
     const handleFormSubmit = async (formData) => {
         try {
+            formData.serviceId=selectedServiceId;
             await registerService({ token, data: formData, serviceApi });
             const updatedServices = await getAllRegisteredServices({ token });
             setServices(updatedServices);
